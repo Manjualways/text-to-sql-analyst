@@ -197,7 +197,7 @@ def ask_llm(prompt: str) -> str:
                     {"role": "user", "content": prompt},
                 ],
                 temperature=0,
-                max_tokens=500,
+                max_tokens=400,
             )
 
             if not response.choices:
