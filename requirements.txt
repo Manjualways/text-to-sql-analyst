@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+chromadb
+python-dotenv
+pydantic
+httpx
+openai
+sqlglot
+pytest
+streamlit
+plotly
+pandas
+requests
