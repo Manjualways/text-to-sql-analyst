@@ -198,9 +198,11 @@ def ask_llm(prompt: str) -> str:
                     {"role": "user", "content": prompt},
                 ],
                 max_completion_tokens=1024,
-                reasoning_effort="low",
-                include_reasoning=False,
                 temperature=0,
+                extra_body={
+                    "include_reasoning": False,
+                    "reasoning_effort": "low",
+                },
             )
 
             if not response.choices:
@@ -217,20 +219,10 @@ def ask_llm(prompt: str) -> str:
                     "estimated_cost_usd": getattr(usage, "cost", None),
                 })
 
-            message = response.choices[0].message
-            content = message.content or ""
+            content = response.choices[0].message.content or ""
             if not content.strip():
-                logger.error(
-                    "Empty LLM response. Model=%s, FinishReason=%s, "
-                    "HasReasoning=%s, Usage=%s",
-                    MODEL,
-                    response.choices[0].finish_reason,
-                    bool(getattr(message, "reasoning", None)),
-                    response.usage,
-                )
                 raise LLMEmptyResponseError(
-                    "The LLM provider returned empty content. "
-                    "Check the provider response and token limits."
+                    "The LLM provider returned an empty response."
                 )
 
             logger.info(
