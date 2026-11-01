@@ -119,6 +119,7 @@ def _safe_error_text(error: Exception) -> str:
 
 def _is_quota_exhausted(error: Exception) -> bool:
     detail = _safe_error_text(error).casefold()
+
     return any(
         marker in detail
         for marker in (
@@ -129,6 +130,8 @@ def _is_quota_exhausted(error: Exception) -> bool:
             "quota exceeded",
             "insufficient_quota",
             "billing hard limit",
+            "requires more credits",
+            "openrouter_credits",
         )
     )
 
@@ -194,7 +197,7 @@ def ask_llm(prompt: str) -> str:
                     {"role": "user", "content": prompt},
                 ],
                 temperature=0,
-                max_tokens=700,
+                max_tokens=500,
             )
 
             if not response.choices:
